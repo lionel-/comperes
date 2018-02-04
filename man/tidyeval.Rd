@@ -3,12 +3,13 @@
 \name{tidyeval}
 \alias{tidyeval}
 \alias{quo}
+\alias{enquo}
 \alias{syms}
 \title{Tidy eval helpers}
 \description{
 These functions provide tidy eval-compatible ways to capture symbols
-(\code{syms()}) and quosures (\code{quo()}). To learn more about tidy eval and how to
-use these tools, read
+(\code{syms()}) and quosures (\code{quo()}, \code{enquo()}). To learn more about tidy eval
+and how to use these tools, read
 \url{http://rlang.tidyverse.org/articles/tidy-evaluation.html}
 }
 \keyword{internal}
