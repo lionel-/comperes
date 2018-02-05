@@ -15,7 +15,7 @@ skip_action <- function(x, ...) {
   x
 }
 
-add_name_prefix <- function(tbl, prefix = "", except = character(0)) {
+add_name_prefix <- function(tbl, prefix = "", except = NULL) {
   if (identical(prefix, "") || (length(prefix) == 0)) {
     return(tbl)
   }
@@ -30,6 +30,33 @@ add_name_prefix <- function(tbl, prefix = "", except = character(0)) {
   }
 
   tbl
+}
+
+first_col <- function(tbl, except = NULL, silent = TRUE,
+                      target_name = "first column") {
+  names_left <- setdiff(colnames(tbl), except)
+
+  if (length(names_left) == 0) {
+    if (!isTRUE(silent)) {
+      message("No ", target_name, " found. Using vector of NAs.")
+    }
+
+    rep(NA, nrow(tbl))
+  } else {
+    if (!isTRUE(silent)) {
+      message("Using ", names_left[[1]], " as ", target_name, ".")
+    }
+
+    tbl[[names_left[1]]]
+  }
+}
+
+levels2 <- function(x) {
+  if (identical(levels(x), NULL)) {
+    as.character(unique(sort(x)))
+  } else {
+    as.character(levels(x))
+  }
 }
 
 # Operations with class ---------------------------------------------------

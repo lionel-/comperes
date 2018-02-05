@@ -26,6 +26,38 @@ test_that("add_name_prefix works", {
 })
 
 
+# first_col ---------------------------------------------------------------
+test_that("first_col works", {
+  input <- data.frame(a = 1:2, b = 2:3, c = 3:4)
+
+  expect_identical(first_col(input, except = NULL), 1:2)
+  expect_identical(first_col(input, except = "a"), 2:3)
+  expect_identical(first_col(input, except = c("b", "c")), 1:2)
+  expect_identical(first_col(input, except = c("a", "b", "c")), c(NA, NA))
+
+  expect_message(first_col(input, except = c("a", "b", "c"), silent = FALSE),
+                 "No.*found")
+  expect_message(first_col(input, except = NULL, silent = FALSE),
+                 "Using.*a.*as")
+
+  expect_message(first_col(input, except = NULL, silent = FALSE,
+                           target_name = "some value"),
+                 "Using.*a.*as.*some value")
+})
+
+
+# levels2 -----------------------------------------------------------------
+test_that("levels2 works", {
+  input_fac <- factor(c("a", "b", "a"), levels = c("b", "a"))
+
+  expect_identical(levels2(input_fac), c("b", "a"))
+
+  input_int <- c(10, 1, 2, 11)
+
+  expect_identical(levels2(input_int), c("1", "2", "10", "11"))
+})
+
+
 # add_class ---------------------------------------------------------------
 test_that("add_class works", {
   input <- 1:10

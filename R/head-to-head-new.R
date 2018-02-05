@@ -11,46 +11,64 @@ h2h_long <- function(cr_data, ..., fill = list()) {
     add_class("h2h_long")
 }
 
-long_to_mat <- function(tbl, row_key, col_key, value) {
-  data <- tibble(
-    row = tbl[[row_key]],
-    col = tbl[[col_key]],
-    val = tbl[[value]]
-  ) %>%
-    # To account for factors
-    tidyr::complete(row, col) %>%
-    mutate(
-      row = as.character(row),
-      col = as.character(col)
-    ) %>%
-    arrange(row, col)
-
-  row_names <- sort(unique(data$row))
-  col_names <- sort(unique(data$col))
-
-  matrix(
-    data$val,
-    nrow = length(row_names), ncol = length(col_names),
-    dimnames = list(row_names, col_names),
-    byrow = TRUE
-  )
-}
-
-h2h_mat <- function(cr_data, ..., fill = list()) {
-  dots <- rlang::enquos(...)
-
-  if (length(dots) == 0) {
-    h2h_fun <- quos(value = NA_real_)
+long_to_mat <- function(tbl, row_key, col_key, value = NULL,
+                        silent = TRUE) {
+  row <- pull(tbl, !! enquo(row_key))
+  col <- pull(tbl, !! enquo(col_key))
+  if (identical(enquo(value), quo(NULL))) {
+    val <- tbl %>%
+      select(- !! enquo(row_key), - !! enquo(col_key)) %>%
+      first_col(silent = silent, target_name = "value")
   } else {
-    h2h_fun <- dots[1]
+    val <- pull(tbl, !! enquo(value))
   }
 
-  h2h_long_res <- cr_data %>%
-    h2h_long(!!! h2h_fun)
+  if (is.list(val)) {
+    fill <- list(NULL)
+  } else {
+    fill <- NA
+  }
 
-  value_col <- setdiff(colnames(h2h_long_res), c("player1", "player2"))
+  row_names <- levels2(row)
+  col_names <- levels2(col)
+  res <- matrix(
+    fill, nrow = length(row_names), ncol = length(col_names),
+    dimnames = list(row_names, col_names)
+  )
+  # For repairing in case `val` is list
+  res_attrs <- attributes(res)
 
-  h2h_long_res %>%
-    long_to_mat("player1", "player2", value_col) %>%
+  res[cbind(as.character(row), as.character(col))] <- val
+  attributes(res) <- res_attrs
+
+  res
+}
+
+as_h2h_mat <- function(tbl) {
+  if (!inherits(tbl, "h2h_long")) {
+    stop("`as_h2h_mat` must be applied only to `h2h_long` object.")
+  }
+
+  tbl %>%
+    long_to_mat(.data$player1, .data$player2,
+                silent = ncol(.) == 3) %>%
     add_class("h2h_mat")
+}
+
+h2h_mat <- function(cr_data, ...) {
+  cr_data %>%
+    h2h_long(...) %>%
+    as_h2h_mat()
+}
+
+fill_h2h_new <- function(x, fill) {
+  UseMethod("fill_h2h_new")
+}
+
+fill_h2h_new.default <- function(x, fill) {
+  stop("`fill_h2h` should be applied to either `h2h_long` or `h2h_mat` object.")
+}
+
+fill_h2h_new.h2h_long <- function(x, fill) {
+
 }
