@@ -52,9 +52,13 @@ test_that("levels2 works", {
 
   expect_identical(levels2(input_fac), c("b", "a"))
 
-  input_int <- c(10, 1, 2, 11)
+  input_int <- c(10, 1, 2, NA, 11)
 
-  expect_identical(levels2(input_int), c("1", "2", "10", "11"))
+  expect_identical(levels2(input_int), c("1", "2", "10", "11", NA))
+  expect_identical(levels2(input_int, na.last = FALSE),
+                   c(NA, "1", "2", "10", "11"))
+  expect_identical(levels2(input_int, na.last = NA),
+                   c("1", "2", "10", "11"))
 })
 
 
@@ -95,27 +99,6 @@ test_that("get_formatC_width works", {
 })
 
 
-# assert_used_names -------------------------------------------------------
-test_that("assert_used_names works", {
-  info <- data.frame(original = c("gameId", "playerId", "scoreId"),
-                     target = c("game", "player", "score"),
-                     stringsAsFactors = FALSE)
-  expect_message(
-    assert_used_names(info, prefix = "prefix: "),
-    "prefix: .*not.*matched.*gameId.*game.*playerId.*player.*scoreId.*score"
-  )
-
-  info$original <- info$target
-  expect_silent(assert_used_names(info))
-
-  info$original[2] <- NA
-  expect_message(
-    assert_used_names(info, prefix = "prefix: "),
-    "prefix: .*not.*found.*NA.*player"
-  )
-})
-
-
 # renamecreate_columns ----------------------------------------------------
 test_that("renamecreate_columns works", {
   input <- data.frame(x = 1:10, y = 2:11, z = 3:12)
@@ -153,4 +136,81 @@ test_that("reduce_full_join works", {
 
   expect_identical(reduce_full_join(input, by = "game"), output)
   expect_identical(reduce_full_join(input[1], by = "game"), input[[1]])
+})
+
+
+# long_to_mat -------------------------------------------------------------
+test_that("long_to_mat works", {
+
+})
+
+test_that("long_to_mat handles factors", {
+
+})
+
+test_that("long_to_mat handles NAs in key columns", {
+
+})
+
+test_that("long_to_mat correctly orders row and column names", {
+
+})
+
+test_that("long_to_mat takes first pair among duplicated", {
+
+})
+
+
+# mat_to_long -------------------------------------------------------------
+test_that("mat_to_long works", {
+
+})
+
+test_that("mat_to_long drops by only value column", {
+
+})
+
+
+# first_col_name ----------------------------------------------------------
+test_that("first_col_name works", {
+
+})
+
+
+# miss_value --------------------------------------------------------------
+test_that("miss_value works", {
+
+})
+
+
+# assert_single_string ----------------------------------------------------
+test_that("assert_single_string works", {
+
+})
+
+
+# assert_used_value_col ---------------------------------------------------
+test_that("assert_used_value_col works", {
+
+})
+
+
+# assert_used_names -------------------------------------------------------
+test_that("assert_used_names works", {
+  info <- data.frame(original = c("gameId", "playerId", "scoreId"),
+                     target = c("game", "player", "score"),
+                     stringsAsFactors = FALSE)
+  expect_message(
+    assert_used_names(info, prefix = "prefix: "),
+    "prefix: .*not.*matched.*gameId.*game.*playerId.*player.*scoreId.*score"
+  )
+
+  info$original <- info$target
+  expect_silent(assert_used_names(info))
+
+  info$original[2] <- NA
+  expect_message(
+    assert_used_names(info, prefix = "prefix: "),
+    "prefix: .*not.*found.*NA.*player"
+  )
 })
