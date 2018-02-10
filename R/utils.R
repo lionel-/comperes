@@ -136,6 +136,48 @@ reduce_full_join <- function(x, by) {
   Reduce(f = reduce_f, x = x)
 }
 
+#' Get matchups from competition results
+#'
+#' This function powers computing Head-to-Head values (both [long][h2h-long] and
+#' [matrix][h2h-mat]).
+#'
+#' @param cr_data Competition results ready for [as_longcr()].
+#'
+#' @details `get_matchups()` returns a [tibble][tibble::tibble] of all
+#' matchups (pairs of players from one game) __actually present__ in `cr_data`
+#' (including matchups of players with oneselves).
+#' It has following columns:
+#' - `game` - game identifier of matchup.
+#' - `player1` - identifier of first player in matchup.
+#' - `score1` - score of the first player in matchup.
+#' - `player2` - identifier of second player in matchup.
+#' - `score2` - score of the second player in matchup.
+#'
+#' __Important notes__:
+#' - Matchups are not symmetrical: matchup "player1"-"player2" is considered
+#' different from "player2"-"player1" in order to except more advanced, not
+#' symmetrical Head-to-Head values.
+#' - Missing values in `player` column after conversion to `longcr` are treated
+#' as separate players. It allows operating with games where multiple players'
+#' identifiers are not known. However, when computing Head-to-Head values they
+#' treated as single player.
+#'
+#' @examples
+#' get_matchups(ncaa2005)
+#'
+#' @seealso [Long format][h2h-long] of Head-to-Head values.
+#'
+#' [Matrix format][h2h-mat] of Head-to-Head values.
+#'
+#' @export
+get_matchups <- function(cr_data) {
+  cr <- cr_data %>%
+    as_longcr(repair = TRUE) %>%
+    select(.data$game, .data$player, .data$score)
+
+  left_join(x = cr, y = cr, by = "game", suffix = c("1", "2"))
+}
+
 
 # Assertions --------------------------------------------------------------
 assert_single_string <- function(...) {

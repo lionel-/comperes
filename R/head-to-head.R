@@ -109,7 +109,7 @@ get_h2h <- function(cr_data, h2h_fun, players = NULL,
   cr <- as_longcr(cr_data, ...)
   players <- get_cr_players(cr_data = cr, players = players, ...)
 
-  h2h_long <- get_cr_matchups(cr_data = cr) %>%
+  h2h_long <- get_matchups(cr_data = cr) %>%
     filter(
       .data$player1 %in% players,
       .data$player2 %in% players

@@ -46,7 +46,7 @@ there is no such column, it will use vector of dummy values (\code{NA}s or
 \section{Head-to-Head value}{
 
 Head-to-Head value is a summary statistic of players'
-\link[=get_cr_matchups]{matchups}. In other words, every game is converted in
+\link[=get_matchups]{matchups}. In other words, every game is converted in
 series of "subgames" between ordered pairs of players (including selfplay)
 which is stored as \link[=results-widecr]{widecr} object. After that summary of
 item, defined by columns \code{player1} and \code{player2} is computed using

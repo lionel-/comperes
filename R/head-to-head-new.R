@@ -30,7 +30,7 @@
 #'
 #' @section Head-to-Head value:
 #' Head-to-Head value is a summary statistic of players'
-#' [matchups][get_cr_matchups()]. In other words, every game is converted in
+#' [matchups][get_matchups()]. In other words, every game is converted in
 #' series of "subgames" between ordered pairs of players (including selfplay)
 #' which is stored as [widecr][results-widecr] object. After that summary of
 #' item, defined by columns `player1` and `player2` is computed using
@@ -65,7 +65,7 @@ NULL
 h2h_long <- function(cr_data, ..., fill = list()) {
   cr_data %>%
     as_longcr(repair = TRUE) %>%
-    get_cr_matchups() %>%
+    get_matchups() %>%
     summarise_item(c("player1", "player2"), ...) %>%
     # This seems more consistent than `player1 = .data$player1` etc.
     tidyr::complete(

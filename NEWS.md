@@ -2,6 +2,7 @@
 
 - Update "item summary" API.
 - Rename `to_longcr` and `to_widecr` to `as_longcr` and `as_widecr` for consistency with other R packages. Slightly tweak their logic.
+- Rename `get_cr_matchups()` to `get_matchups()`.
 
 
 # comperes 0.1.0.9000 (2017-06-18)

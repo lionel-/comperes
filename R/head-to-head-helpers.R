@@ -19,7 +19,7 @@
 #' players present in `cr_data`. If not `NULL` then returns its argument
 #' `players`.
 #'
-#' `get_cr_matchups()` returns a [tibble][tibble::tibble] of all
+#' `get_matchups()` returns a [tibble][tibble::tibble] of all
 #' matchups (pairs of players from one game) present in `cr_data`. It has
 #' following columns:
 #'   - `game` - game identifier of matchup.
@@ -39,7 +39,7 @@
 #'   score = 31:45
 #' )
 #' get_cr_players(cr_data, players = NULL)
-#' get_cr_matchups(cr_data)
+#' get_matchups(cr_data)
 #'
 #' @seealso [Head-to-Head computation][head-to-head], [Head-to-Head
 #'   functions][head-to-head-functions].
@@ -82,14 +82,3 @@ get_cr_players <- function(cr_data, players = NULL, ...) {
 
   players
 }
-
-#' @rdname head-to-head-helpers
-#' @export
-get_cr_matchups <- function(cr_data) {
-  cr <- cr_data %>%
-    as_longcr(repair = TRUE) %>%
-    select(.data$game, .data$player, .data$score)
-
-  left_join(x = cr, y = cr, by = "game", suffix = c("1", "2"))
-}
-

@@ -6,7 +6,6 @@
 \alias{fill_h2h}
 \alias{print.h2h}
 \alias{get_cr_players}
-\alias{get_cr_matchups}
 \title{Helpers for computing Head-to-Head matrices}
 \usage{
 players_drop(h2h_mat, ...)
@@ -16,8 +15,6 @@ fill_h2h(h2h_mat, fill = NA_real_, ...)
 \method{print}{h2h}(x, ...)
 
 get_cr_players(cr_data, players = NULL, ...)
-
-get_cr_matchups(cr_data)
 }
 \arguments{
 \item{h2h_mat}{Head-to-Head matrix.}
@@ -43,7 +40,7 @@ means these players are absent in original competition results).
 players present in \code{cr_data}. If not \code{NULL} then returns its argument
 \code{players}.
 
-\code{get_cr_matchups()} returns a \link[tibble:tibble]{tibble} of all
+\code{get_matchups()} returns a \link[tibble:tibble]{tibble} of all
 matchups (pairs of players from one game) present in \code{cr_data}. It has
 following columns:
 \itemize{
@@ -68,7 +65,7 @@ cr_data <- data.frame(
   score = 31:45
 )
 get_cr_players(cr_data, players = NULL)
-get_cr_matchups(cr_data)
+get_matchups(cr_data)
 
 }
 \seealso{

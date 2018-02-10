@@ -152,6 +152,28 @@ test_that("reduce_full_join works", {
 })
 
 
+# get_matchups ---------------------------------------------------------
+test_that("get_matchups works", {
+  cr_data <- data.frame(
+    game = rep(1:2, each = 2),
+    player = rep(1:2, times = 2),
+    score = 31:34,
+    scoreSP = 44:41
+  )
+
+  output <- get_matchups(cr_data)
+  output_ref <- dplyr::tibble(
+    game = rep(1:2, each = 4),
+    player1 = rep(rep(1:2, each = 2), times = 2),
+    score1 = rep(31:34, each = 2),
+    player2 = rep(1:2, times = 4),
+    score2 = c(rep(31:32, times = 2), rep(33:34, times = 2))
+  )
+
+  expect_equal(output, output_ref)
+})
+
+
 # assert_single_string ----------------------------------------------------
 test_that("assert_single_string works", {
   expect_silent(assert_single_string())

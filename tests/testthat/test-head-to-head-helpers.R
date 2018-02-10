@@ -68,16 +68,3 @@ test_that("get_cr_players handles NA values", {
   expect_equal(get_cr_players(input), c(NA, NaN, 1))
 })
 
-
-# get_cr_matchups ------------------------------------------------------------
-test_that("get_cr_matchups works", {
-  output <- dplyr::tibble(
-    game = rep(1:2, each = 4),
-    player1 = rep(rep(1:2, each = 2), times = 2),
-    score1 = rep(31:34, each = 2),
-    player2 = rep(1:2, times = 4),
-    score2 = c(rep(31:32, times = 2), rep(33:34, times = 2))
-  )
-
-  expect_equal(get_cr_matchups(cr_data), output)
-})
