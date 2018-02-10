@@ -37,7 +37,7 @@ Basically, it uses supplied function to compute \link[=h2h-long]{long format} of
 Head-to-Head values and then transforms it naturally to matrix, filling
 missing values with \code{fill}.
 
-\code{to_h2h_mat()} takes object of \code{h2h_long} structure and converts it into
+\code{to_h2h_mat()} takes \strong{object of \code{h2h_long} structure} and converts it into
 \code{h2h_mat} using column with name \code{value} for values and filling missing
 values with \code{fill}. If \code{value} is \code{NULL} it takes first non-player column. If
 there is no such column, it will use vector of dummy values (\code{NA}s or

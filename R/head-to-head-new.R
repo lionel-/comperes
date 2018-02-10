@@ -23,8 +23,8 @@
 #' [complete()][tidyr::complete()]. Use `fill` as in `complete()` to control
 #' filling values. To drop those rows use tidyr's [drop_na()][tidyr::drop_na()].
 #'
-#' `to_h2h_long()` takes object of [h2h_mat][h2h-mat] structure and converts it
-#' into `h2h_long` object with value column named as stored in `value`. Use
+#' `to_h2h_long()` takes __object of [h2h_mat][h2h-mat] structure__ and converts
+#' it into `h2h_long` object with value column named as stored in `value`. Use
 #' `drop = TRUE` to remove rows with missing values in value column (but not in
 #' players').
 #'
@@ -100,7 +100,7 @@ to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
 #'   Head-to-Head values and then transforms it naturally to matrix, filling
 #'   missing values with `fill`.
 #'
-#' `to_h2h_mat()` takes object of `h2h_long` structure and converts it into
+#' `to_h2h_mat()` takes __object of `h2h_long` structure__ and converts it into
 #' `h2h_mat` using column with name `value` for values and filling missing
 #' values with `fill`. If `value` is `NULL` it takes first non-player column. If
 #' there is no such column, it will use vector of dummy values (`NA`s or
@@ -140,7 +140,7 @@ h2h_mat <- function(cr_data, ..., fill = NULL) {
   res_long <- cr_data %>% h2h_long(!!! dots)
 
   value_col <- setdiff(colnames(res_long), c("player1", "player2"))
-  if (was_trunc) {
+  if (was_trunc || (length(value_col) == 0)) {
     assert_used_value_col(value_col)
   }
 
@@ -148,14 +148,15 @@ h2h_mat <- function(cr_data, ..., fill = NULL) {
     # This might be even faster then `fill` as list-argument to `h2h_long`
     # in case of many players
     tidyr::drop_na(one_of(value_col)) %>%
-    to_h2h_mat(fill = fill)
+    to_h2h_mat(value = value_col, fill = fill)
 }
 
 #' @rdname h2h-mat
 #' @export
 to_h2h_mat <- function(tbl, value = NULL, fill = NULL) {
   tbl %>%
-    long_to_mat("player1", "player2", value, fill = fill) %>%
+    long_to_mat("player1", "player2", value, fill = fill,
+                silent = !identical(value, NULL)) %>%
     add_class_cond("h2h_mat")
 }
 

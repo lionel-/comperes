@@ -46,8 +46,8 @@ values in Head-to-Head columns) by using tidyr's
 \link[tidyr:complete]{complete()}. Use \code{fill} as in \code{complete()} to control
 filling values. To drop those rows use tidyr's \link[tidyr:drop_na]{drop_na()}.
 
-\code{to_h2h_long()} takes object of \link[=h2h-mat]{h2h_mat} structure and converts it
-into \code{h2h_long} object with value column named as stored in \code{value}. Use
+\code{to_h2h_long()} takes \strong{object of \link[=h2h-mat]{h2h_mat} structure} and converts
+it into \code{h2h_long} object with value column named as stored in \code{value}. Use
 \code{drop = TRUE} to remove rows with missing values in value column (but not in
 players').
 }
