@@ -171,6 +171,7 @@ test_that("get_matchups works", {
   )
 
   expect_equal(output, output_ref)
+  expect_true(is_widecr(output))
 })
 
 
