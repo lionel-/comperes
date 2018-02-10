@@ -26,23 +26,36 @@ test_that("add_name_prefix works", {
 })
 
 
-# first_col ---------------------------------------------------------------
-test_that("first_col works", {
-  input <- data.frame(a = 1:2, b = 2:3, c = 3:4)
+# first_col_name ----------------------------------------------------------
+test_that("first_col_name works", {
+  input <- data.frame(x = 1, y = 2)
+  input_no_col <- input[, -(1:2)]
 
-  expect_identical(first_col(input, except = NULL), 1:2)
-  expect_identical(first_col(input, except = "a"), 2:3)
-  expect_identical(first_col(input, except = c("b", "c")), 1:2)
-  expect_identical(first_col(input, except = c("a", "b", "c")), c(NA, NA))
+  expect_identical(first_col_name(input), "x")
+  expect_identical(first_col_name(input_no_col), NULL)
 
-  expect_message(first_col(input, except = c("a", "b", "c"), silent = FALSE),
-                 "No.*found")
-  expect_message(first_col(input, except = NULL, silent = FALSE),
-                 "Using.*a.*as")
+  # Appropriate messaging
+  expect_silent(first_col_name(input, silent = TRUE))
+  expect_silent(first_col_name(input_no_col, silent = TRUE))
 
-  expect_message(first_col(input, except = NULL, silent = FALSE,
-                           target_name = "some value"),
-                 "Using.*a.*as.*some value")
+  expect_message(first_col_name(input, silent = FALSE), "Us.*x")
+  expect_message(
+    first_col_name(input_no_col, silent = FALSE),
+    "[Nn]o.*Us.*dummy"
+  )
+
+  expect_message(
+    first_col_name(input, silent = FALSE, target_name = "new value"),
+    "new value"
+  )
+})
+
+
+# miss_value --------------------------------------------------------------
+test_that("miss_value works", {
+  expect_identical(miss_value(), NA)
+  expect_identical(miss_value(type = "list"), list(NULL))
+  expect_identical(miss_value(fill = 0), 0)
 })
 
 
@@ -139,59 +152,33 @@ test_that("reduce_full_join works", {
 })
 
 
-# long_to_mat -------------------------------------------------------------
-test_that("long_to_mat works", {
-
-})
-
-test_that("long_to_mat handles factors", {
-
-})
-
-test_that("long_to_mat handles NAs in key columns", {
-
-})
-
-test_that("long_to_mat correctly orders row and column names", {
-
-})
-
-test_that("long_to_mat takes first pair among duplicated", {
-
-})
-
-
-# mat_to_long -------------------------------------------------------------
-test_that("mat_to_long works", {
-
-})
-
-test_that("mat_to_long drops by only value column", {
-
-})
-
-
-# first_col_name ----------------------------------------------------------
-test_that("first_col_name works", {
-
-})
-
-
-# miss_value --------------------------------------------------------------
-test_that("miss_value works", {
-
-})
-
-
 # assert_single_string ----------------------------------------------------
 test_that("assert_single_string works", {
+  expect_silent(assert_single_string())
+  expect_silent(assert_single_string(a = "a"))
+  expect_silent(assert_single_string(a = "a", "b"))
 
+  expect_error(assert_single_string(a = 1), "a.*single.*string")
+  expect_error(assert_single_string(a = "a", b = 1), "b.*single.*string")
+  expect_error(assert_single_string(a = "a", 1), "single.*string")
 })
 
 
 # assert_used_value_col ---------------------------------------------------
 test_that("assert_used_value_col works", {
+  expect_message(assert_used_value_col(NULL), "[Nn]o.*dummy")
+  expect_message(assert_used_value_col(character(0)), "[Nn]o.*dummy")
 
+  expect_message(assert_used_value_col("value_column"), "Us.*value_column")
+
+  expect_message(
+    assert_used_value_col(NULL, target_name = "new value"),
+    "new value"
+  )
+  expect_message(
+    assert_used_value_col("value_column", target_name = "new value"),
+    "Us.*new value"
+  )
 })
 
 
