@@ -122,10 +122,10 @@ to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
 #'   missing values with `fill`.
 #'
 #' `to_h2h_mat()` takes __object of `h2h_long` structure__ and converts it into
-#' `h2h_mat` using column with name `value` for values and filling missing
-#' values with `fill`. If `value` is `NULL` it takes first non-player column. If
-#' there is no such column, it will use vector of dummy values (`NA`s or
-#' `fill`s).
+#' `h2h_mat` using column with name `value` for values and filling data for
+#' implicitly missing (not explicitly provided in `tbl`) player pairs with
+#' `fill`. If `value` is `NULL` it takes first non-player column. If there is no
+#' such column, it will use vector of dummy values (`NA`s or `fill`s).
 #'
 #' @inheritSection h2h-long Head-to-Head value
 #'

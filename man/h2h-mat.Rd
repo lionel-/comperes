@@ -38,10 +38,10 @@ Head-to-Head values and then transforms it naturally to matrix, filling
 missing values with \code{fill}.
 
 \code{to_h2h_mat()} takes \strong{object of \code{h2h_long} structure} and converts it into
-\code{h2h_mat} using column with name \code{value} for values and filling missing
-values with \code{fill}. If \code{value} is \code{NULL} it takes first non-player column. If
-there is no such column, it will use vector of dummy values (\code{NA}s or
-\code{fill}s).
+\code{h2h_mat} using column with name \code{value} for values and filling data for
+implicitly missing (not explicitly provided in \code{tbl}) player pairs with
+\code{fill}. If \code{value} is \code{NULL} it takes first non-player column. If there is no
+such column, it will use vector of dummy values (\code{NA}s or \code{fill}s).
 }
 \section{Head-to-Head value}{
 
