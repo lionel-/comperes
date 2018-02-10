@@ -4,18 +4,16 @@
 \alias{num_wins}
 \title{Compute number of wins}
 \usage{
-num_wins(player1, score1, player2, score2, half_for_draw)
+num_wins(score_1, score_2, half_for_draw = FALSE, na.rm = TRUE)
 }
 \arguments{
-\item{player1}{Vector of \code{player1} identifiers.}
+\item{score_1}{Vector of scores for first player.}
 
-\item{score1}{Vector of scores for \code{player1}.}
-
-\item{player2}{Vector of \code{player2} identifiers.}
-
-\item{score2}{Vector of scores for \code{player2}.}
+\item{score_2}{Vector of scores for second player.}
 
 \item{half_for_draw}{Use \code{TRUE} to add half the mathups with draws.}
+
+\item{na.rm}{Use \code{TRUE} to not count pair of scores with at least one \code{NA}.}
 }
 \description{
 Function to accompany \code{num_wins} and \code{num_wins2} in \link{h2h_funs}. May be useful

@@ -218,11 +218,10 @@ to_h2h_mat <- function(tbl, value = NULL, fill = NULL) {
 #' returns 0 if result is negative.
 #' - `sum_score` - computes sum of scores of `player1`.
 #' - `num_wins` - computes number of matchups `player1` scored __more__
-#' than `player2`. Draws (determined by [dplyr::near()]) and matchups between
-#' same player are omitted.
+#' than `player2`. Draws (determined by [dplyr::near()]) are omitted.
 #' - `num_wins2` - computes number of matchups `player1` scored __more__ than
-#' `player2` __plus__ half the number of matchups where they had draw. Matchups
-#' between same player are omitted.
+#' `player2` __plus__ half the number of matchups where they had draw. __Note__
+#' that will equal `player1` and `player2` there will be non-zero output.
 #' - `num` - computes number of matchups.
 #'
 #' __Note__ that it is generally better to subset `h2h_funs` using names
@@ -246,10 +245,8 @@ h2h_funs <- list(
   sum_score_diff = quo(sum(score1 - score2)),
   sum_score_diff_pos = quo(max(sum(score1 - score2), 0)),
   sum_score = quo(sum(score1)),
-  num_wins = quo(num_wins(player1, score1, player2, score2,
-                          half_for_draw = FALSE)),
-  num_wins2 = quo(num_wins(player1, score1, player2, score2,
-                           half_for_draw = TRUE)),
+  num_wins = quo(num_wins(score1, score2, half_for_draw = FALSE)),
+  num_wins2 = quo(num_wins(score1, score2, half_for_draw = TRUE)),
   num = quo(n())
 )
 
@@ -258,23 +255,17 @@ h2h_funs <- list(
 #' Function to accompany `num_wins` and `num_wins2` in [h2h_funs]. May be useful
 #' for outer usage.
 #'
-#' @param player1 Vector of `player1` identifiers.
-#' @param score1 Vector of scores for `player1`.
-#' @param player2 Vector of `player2` identifiers.
-#' @param score2 Vector of scores for `player2`.
+#' @param score_1 Vector of scores for first player.
+#' @param score_2 Vector of scores for second player.
 #' @param half_for_draw Use `TRUE` to add half the mathups with draws.
+#' @param na.rm Use `TRUE` to not count pair of scores with at least one `NA`.
 #'
 #' @keywords internal
 #'
 #' @export
-num_wins <- function(player1, score1, player2, score2,
-                     half_for_draw) {
-  not_identity <- player1 != player2
-  score1 <- score1[not_identity]
-  score2 <- score2[not_identity]
+num_wins <- function(score_1, score_2, half_for_draw = FALSE, na.rm = TRUE) {
+  near_score <- near(score_1, score_2)
 
-  near_score <- near(score1, score2)
-
-  sum(score1[!near_score] > score2[!near_score]) +
-    half_for_draw * 0.5 * sum(near_score)
+  sum(score_1[!near_score] > score_2[!near_score], na.rm = na.rm) +
+    half_for_draw * 0.5 * sum(near_score, na.rm = na.rm)
 }

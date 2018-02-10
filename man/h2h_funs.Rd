@@ -32,11 +32,10 @@ returns 0 if result is negative.
 returns 0 if result is negative.
 \item \code{sum_score} - computes sum of scores of \code{player1}.
 \item \code{num_wins} - computes number of matchups \code{player1} scored \strong{more}
-than \code{player2}. Draws (determined by \code{\link[dplyr:near]{dplyr::near()}}) and matchups between
-same player are omitted.
+than \code{player2}. Draws (determined by \code{\link[dplyr:near]{dplyr::near()}}) are omitted.
 \item \code{num_wins2} - computes number of matchups \code{player1} scored \strong{more} than
-\code{player2} \strong{plus} half the number of matchups where they had draw. Matchups
-between same player are omitted.
+\code{player2} \strong{plus} half the number of matchups where they had draw. \strong{Note}
+that will equal \code{player1} and \code{player2} there will be non-zero output.
 \item \code{num} - computes number of matchups.
 }
 
