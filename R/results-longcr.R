@@ -2,7 +2,7 @@
 #'
 #' Functions for dealing with competition results in long format.
 #'
-#' @param cr_data Data of competition results (convertable to tabular).
+#' @param cr_data Data of competition results (convertible to tabular).
 #' @param repair Whether to repair input.
 #' @param ... Additional arguments to be passed to or from methods.
 #'

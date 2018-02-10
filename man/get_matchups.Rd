@@ -16,7 +16,7 @@ This function powers computing Head-to-Head values (both \link[=h2h-long]{long} 
 \details{
 \code{get_matchups()} returns a \link[tibble:tibble]{tibble} of all
 matchups (pairs of players from one game) \strong{actually present} in \code{cr_data}
-(including matchups of players with oneselves).
+(including matchups of players with themselves).
 It has following columns:
 \itemize{
 \item \code{game} - game identifier of matchup.

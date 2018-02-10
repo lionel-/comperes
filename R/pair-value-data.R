@@ -1,6 +1,6 @@
 #' Convert between long pair-value data and matrix
 #'
-#' Functions for convertion between long data (data frame with columns for pair
+#' Functions for conversion between long data (data frame with columns for pair
 #' identifiers and value column) and matrix.
 #'
 #' @param tbl Data frame with pair-value data.

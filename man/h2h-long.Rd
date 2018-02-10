@@ -53,11 +53,12 @@ players').
 }
 \section{Head-to-Head value}{
 
-Head-to-Head value is a summary statistic of players'
-\link[=get_matchups]{matchups}. In other words, every game is converted in
-series of "subgames" between ordered pairs of players (including selfplay)
-which is stored as \link[=results-widecr]{widecr} object. After that summary of
-item, defined by columns \code{player1} and \code{player2} is computed using
+Head-to-Head value is a summary statistic of direct confrontation between two
+players. It is assumed that this value can be computed based only on the
+players' \link[=get_matchups]{matchups}. In other words, every game is converted
+in series of "subgames" between ordered pairs of players (including selfplay)
+which is stored as \link[=results-widecr]{widecr} object. After that, summary of
+item, defined by columns \code{player1} and \code{player2}, is computed using
 \code{\link[=summarise_item]{summarise_item()}}.
 
 That said, name-value pairs of Head-to-Head functions should be defined as
@@ -78,4 +79,9 @@ ncaa2005[-(1:2), ] \%>\%
     fill = list(mean_score = 0)
   )
 
+}
+\seealso{
+\link[=h2h-mat]{Matrix format} of Head-to-Head values.
+
+\link[=h2h_funs]{Common Head-to-Head functions}.
 }

@@ -29,11 +29,12 @@
 #' players').
 #'
 #' @section Head-to-Head value:
-#' Head-to-Head value is a summary statistic of players'
-#' [matchups][get_matchups()]. In other words, every game is converted in
-#' series of "subgames" between ordered pairs of players (including selfplay)
-#' which is stored as [widecr][results-widecr] object. After that summary of
-#' item, defined by columns `player1` and `player2` is computed using
+#' Head-to-Head value is a summary statistic of direct confrontation between two
+#' players. It is assumed that this value can be computed based only on the
+#' players' [matchups][get_matchups()]. In other words, every game is converted
+#' in series of "subgames" between ordered pairs of players (including selfplay)
+#' which is stored as [widecr][results-widecr] object. After that, summary of
+#' item, defined by columns `player1` and `player2`, is computed using
 #' [summarise_item()].
 #'
 #' That said, name-value pairs of Head-to-Head functions should be defined as
@@ -56,6 +57,10 @@
 #'     mean_score = mean(score1),
 #'     fill = list(mean_score = 0)
 #'   )
+#'
+#' @seealso [Matrix format][h2h-mat] of Head-to-Head values.
+#'
+#' [Common Head-to-Head functions][h2h_funs].
 #'
 #' @name h2h-long
 NULL
@@ -122,6 +127,10 @@ to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
 #'
 #' ncaa2005[-(1:2), ] %>%
 #'   h2h_mat(mean_score = mean(score1), fill = 0)
+#'
+#' @seealso [Long format][h2h-long] of Head-to-Head values.
+#'
+#' [Common Head-to-Head functions][h2h_funs].
 #'
 #' @name h2h-mat
 NULL

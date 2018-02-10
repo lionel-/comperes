@@ -145,7 +145,7 @@ reduce_full_join <- function(x, by) {
 #'
 #' @details `get_matchups()` returns a [tibble][tibble::tibble] of all
 #' matchups (pairs of players from one game) __actually present__ in `cr_data`
-#' (including matchups of players with oneselves).
+#' (including matchups of players with themselves).
 #' It has following columns:
 #' - `game` - game identifier of matchup.
 #' - `player1` - identifier of first player in matchup.

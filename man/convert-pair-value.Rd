@@ -37,7 +37,7 @@ indicate first key in pair, col names - second.
 one for first key in pair, the one for second, and the one for value.
 }
 \description{
-Functions for convertion between long data (data frame with columns for pair
+Functions for conversion between long data (data frame with columns for pair
 identifiers and value column) and matrix.
 }
 \details{

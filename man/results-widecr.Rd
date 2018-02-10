@@ -11,7 +11,7 @@ is_widecr(cr_data)
 as_widecr(cr_data, repair = TRUE, ...)
 }
 \arguments{
-\item{cr_data}{Data of competition results (convertable to tabular).}
+\item{cr_data}{Data of competition results (convertible to tabular).}
 
 \item{repair}{Whether to repair input.}
 
