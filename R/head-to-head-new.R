@@ -162,8 +162,86 @@ to_h2h_mat <- function(tbl, value = NULL, fill = NULL) {
 
 
 # Head-to-Head functions --------------------------------------------------
+#' Common Head-to-Head functions
+#'
+#' List of commonly used functions for computing Head-to-Head values.
+#'
+#' @details `h2h_funs` is a named list of [quosures][rlang::quo()]
+#'   representing commonly used expressions of Head-to-Head functions for
+#'   computing Head-to-Head values with [h2h_long()] or [h2h_mat()]. Names of
+#'   the elements will be used as Head-to-Head value names. To use them inside
+#'   `h2h_long()` or `h2h_mat()` use [unquoting][rlang::quasiquotation]
+#'   mechanism from rlang package.
+#'
+#' Currently present functions:
+#' - `mean_score_diff` - computes mean score difference of `player1`
+#' compared to `player2`.
+#' - `mean_score_diff_pos` - equivalent to `mean_score_diff` but
+#' returns 0 if result is negative.
+#' - `mean_score` - computes mean score of `player1`.
+#' - `sum_score_diff` - computes sum of score differences of
+#'   `player1` compared to `player2`.
+#' - `sum_score_diff_pos` - equivalent to `sum_score_diff` but
+#' returns 0 if result is negative.
+#' - `sum_score` - computes sum of scores of `player1`.
+#' - `num_wins` - computes number of matchups `player1` scored __more__
+#' than `player2`. Draws (determined by [dplyr::near()]) and matchups between
+#' same player are omitted.
+#' - `num_wins2` - computes number of matchups `player1` scored __more__ than
+#' `player2` __plus__ half the number of matchups where they had draw. Matchups
+#' between same player are omitted.
+#' - `num` - computes number of matchups.
+#'
+#' __Note__ that it is generally better to subset `h2h_funs` using names
+#' rather than indices because the order of elements might change in future
+#' versions.
+#'
+#' @examples
+#' ncaa2005 %>% h2h_long(!!! h2h_funs)
+#'
+#' ncaa2005 %>% h2h_mat(!!! h2h_funs["num_wins2"])
+#'
+#' @seealso [Long format][h2h-long] of Head-to-Head values.
+#'
+#' [Matrix format][h2h-mat] of Head-to-Head values.
+#'
+#' @export
+h2h_funs <- list(
+  mean_score_diff = quo(mean(score1 - score2)),
+  mean_score_diff_pos = quo(max(mean(score1 - score2), 0)),
+  mean_score = quo(mean(score1)),
+  sum_score_diff = quo(sum(score1 - score2)),
+  sum_score_diff_pos = quo(max(sum(score1 - score2), 0)),
+  sum_score = quo(sum(score1)),
+  num_wins = quo(num_wins(player1, score1, player2, score2,
+                          half_for_draw = FALSE)),
+  num_wins2 = quo(num_wins(player1, score1, player2, score2,
+                           half_for_draw = TRUE)),
+  num = quo(n())
+)
 
+#' Compute number of wins
+#'
+#' Function to accompany `num_wins` and `num_wins2` in [h2h_funs]. May be useful
+#' for outer usage.
+#'
+#' @param player1 Vector of `player1` identifiers.
+#' @param score1 Vector of scores for `player1`.
+#' @param player2 Vector of `player2` identifiers.
+#' @param score2 Vector of scores for `player2`.
+#' @param half_for_draw Use `TRUE` to add half the mathups with draws.
+#'
+#' @keywords internal
+#'
+#' @export
+num_wins <- function(player1, score1, player2, score2,
+                     half_for_draw) {
+  not_identity <- player1 != player2
+  score1 <- score1[not_identity]
+  score2 <- score2[not_identity]
 
+  near_score <- near(score1, score2)
 
-# Head-to-Head helpers ----------------------------------------------------
-
+  sum(score1[!near_score] > score2[!near_score]) +
+    half_for_draw * 0.5 * sum(near_score)
+}
