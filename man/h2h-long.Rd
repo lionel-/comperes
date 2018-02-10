@@ -40,11 +40,19 @@ Functions to compute Head-to-Head values in long pair-value format.
 Head-to-Head values at the same time by supplying multiple summary
 functions in \code{...}. If no function is supplied in \code{...}
 
-After computing Head-to-Head values of present matchups, implicit missing
-matchups are turned into explicit (by adding corresponding rows with filling
-values in Head-to-Head columns) by using tidyr's
-\link[tidyr:complete]{complete()}. Use \code{fill} as in \code{complete()} to control
-filling values. To drop those rows use tidyr's \link[tidyr:drop_na]{drop_na()}.
+After computing Head-to-Head values of actually present matchups, they are
+aligned with "levels" (see \code{\link[=levels2]{levels2()}}) of \code{player} vector (after applying
+\code{as_longcr()}). This is a way to target function on fixed set of players by
+using factor columns. The procedure is:
+\itemize{
+\item Implicit missing matchups are turned into explicit (by adding corresponding
+rows with filling values in Head-to-Head columns) by using tidyr's
+\link[tidyr:complete]{complete()}.
+\item All matchups not containing players from "levels" are removed.
+}
+
+Use \code{fill} as in \code{complete()} to control filling values. To drop those rows
+use tidyr's \link[tidyr:drop_na]{drop_na()}.
 
 \code{to_h2h_long()} takes \strong{object of \link[=h2h-mat]{h2h_mat} structure} and converts
 it into \code{h2h_long} object with value column named as stored in \code{value}. Use

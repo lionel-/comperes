@@ -1,3 +1,4 @@
+# Long format of Head-to-Head values --------------------------------------
 #' Compute long format of Head-to-Head values
 #'
 #' Functions to compute Head-to-Head values in long pair-value format.
@@ -17,11 +18,17 @@
 #'   Head-to-Head values at the same time by supplying multiple summary
 #'   functions in `...`. If no function is supplied in `...`
 #'
-#' After computing Head-to-Head values of present matchups, implicit missing
-#' matchups are turned into explicit (by adding corresponding rows with filling
-#' values in Head-to-Head columns) by using tidyr's
-#' [complete()][tidyr::complete()]. Use `fill` as in `complete()` to control
-#' filling values. To drop those rows use tidyr's [drop_na()][tidyr::drop_na()].
+#' After computing Head-to-Head values of actually present matchups, they are
+#' aligned with "levels" (see [levels2()]) of `player` vector (after applying
+#' `as_longcr()`). This is a way to target function on fixed set of players by
+#' using factor columns. The procedure is:
+#' - Implicit missing matchups are turned into explicit (by adding corresponding
+#' rows with filling values in Head-to-Head columns) by using tidyr's
+#' [complete()][tidyr::complete()].
+#' - All matchups not containing players from "levels" are removed.
+#'
+#' Use `fill` as in `complete()` to control filling values. To drop those rows
+#' use tidyr's [drop_na()][tidyr::drop_na()].
 #'
 #' `to_h2h_long()` takes __object of [h2h_mat][h2h-mat] structure__ and converts
 #' it into `h2h_long` object with value column named as stored in `value`. Use
@@ -68,14 +75,21 @@ NULL
 #' @rdname h2h-long
 #' @export
 h2h_long <- function(cr_data, ..., fill = list()) {
-  cr_data %>%
-    as_longcr(repair = TRUE) %>%
+  cr <- cr_data %>%
+    as_longcr(repair = TRUE)
+  player_levs <- levels2(cr$player)
+
+  cr %>%
     get_matchups() %>%
     summarise_item(c("player1", "player2"), ...) %>%
     # This seems more consistent than `player1 = .data$player1` etc.
     tidyr::complete(
       !!! syms(c("player1", "player2")),
       fill = fill
+    ) %>%
+    filter(
+      .data$player1 %in% player_levs,
+      .data$player2 %in% player_levs
     ) %>%
     add_class("h2h_long")
 }
@@ -88,6 +102,8 @@ to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
     add_class_cond("h2h_long")
 }
 
+
+# Matrix format of Head-to-Head values ------------------------------------
 #' Compute matrix format of Head-to-Head values
 #'
 #' Functions to compute Head-to-Head values in matrix pair-value format.
@@ -149,14 +165,22 @@ h2h_mat <- function(cr_data, ..., fill = NULL) {
   res_long <- cr_data %>% h2h_long(!!! dots)
 
   value_col <- setdiff(colnames(res_long), c("player1", "player2"))
-  if (was_trunc || (length(value_col) == 0)) {
+  if (was_trunc) {
     assert_used_value_col(value_col)
   }
 
-  res_long %>%
-    # This might be even faster then `fill` as list-argument to `h2h_long`
-    # in case of many players
-    tidyr::drop_na(one_of(value_col)) %>%
+  # If some value column is actually supplied missing values should be removed
+  # in order to use `fill` from `to_h2h_mat`.
+  # If don't do it conditionally then call `h2h_mat(cr_data)` will produce
+  # output after dropping NAs in __all__ columns (behavior of `drop_na()`)
+  if (length(value_col) > 0) {
+    res_long <- res_long %>%
+      # This might be even faster then `fill` as list-argument to `h2h_long`
+      # in case of many players
+      tidyr::drop_na(one_of(value_col))
+  }
+
+   res_long %>%
     to_h2h_mat(value = value_col, fill = fill)
 }
 
