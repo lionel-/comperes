@@ -124,11 +124,8 @@ mat_to_long <- function(mat, row_key, col_key, value, drop = FALSE) {
   cols <- rep(colnames(mat), times = nrow(mat))
   vals <- c(t(mat))
 
-  res <- tibble(
-    !! enexpr(row_key) := rows,
-    !! enexpr(col_key) := cols,
-    !! enexpr(value) := vals
-  )
+  res <- tibble(row = rows, col = cols, val = vals)
+  colnames(res) <- c(row_key, col_key, value)
 
   if (isTRUE(drop)) {
     res <- res %>% tidyr::drop_na(one_of(value))
