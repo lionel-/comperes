@@ -1,7 +1,7 @@
 #' Convert between long pair-value data and matrix
 #'
-#' Functions for conversion between long data (data frame with columns for pair
-#' identifiers and value column) and matrix.
+#' Functions for conversion between long pair-value data (data frame with
+#' columns for pair identifiers and value column) and matrix.
 #'
 #' @param tbl Data frame with pair-value data.
 #' @param row_key String name of column for first key in pair.
@@ -11,24 +11,26 @@
 #' @param silent Use `TRUE` to omit message about guessed value column (see
 #'   Details).
 #' @param mat Matrix with pair-value data.
-#' @param drop Use `TRUE` to drop rows with "missing" values (see Details).
+#' @param drop Use `TRUE` to drop rows with missing value (see Details).
 #'
 #' @details Pair-value data is commonly used in description of pairs of objects.
 #' Pair is described by two keys (usually integer or character) and value is an
 #' object of arbitrary nature.
 #'
 #' In __long format__ there are at least three columns: for first key in pair,
-#' for second and for value (might be more). In __matrix format__ pair-value
+#' for second key and for value (might be more). In __matrix format__ pair-value
 #' data is represented as matrix of values with row names as character
 #' representation of first key, column names - second key.
 #'
 #' `long_to_mat()` works as follows:
 #' - Pair identifiers are taken from columns with names `row_key` (to be used as
 #' row names) and `col_key` (to be used as column names). Unique identifiers
-#' (and future dimension names) are determined with [levels2()]. __Note__ that
-#' `NA`s are treated as single unknown key and put on last place.
+#' (and future dimension names) are determined with [levels2()]. This is a way
+#' to target function on specific set of pairs by using factor columns. __Note__
+#' that `NA`s are treated as single unknown key and put on last place (in case
+#' of non-factor).
 #' - Values are taken from column with name `value`. __Note__ that if `value`
-#' has length 0 (typically is `NULL`) then `long_to_mat()` will take first
+#' has length 0 (typically `NULL`) then `long_to_mat()` will take first
 #' non-key column. If there is no such column, it will use vector of dummy
 #' values (`NA`s or `fill`s). In both cases a message is given if `silent =
 #' FALSE`.
@@ -37,8 +39,9 @@
 #' __Note__ that in case of duplicated pairs the value from first occurrence is
 #' taken.
 #'
-#' `mat_to_long()` basically performs inverse operation to `long_to_mat()`. If
-#' `drop = TRUE` it drops rows with values (but not keys) being missing.
+#' `mat_to_long()` basically performs inverse operation to `long_to_mat()` but
+#' pair identifiers are always character. If `drop = TRUE` it drops rows with
+#' values (but not keys) being missing.
 #'
 #' @return `long_to_mat()` returns a matrix with selected values where row names
 #'   indicate first key in pair, col names - second.

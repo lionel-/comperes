@@ -17,7 +17,7 @@ to_h2h_mat(tbl, value = NULL, fill = NULL)
 
 \item{fill}{A single value to use instead of \code{NA} for missing pairs.}
 
-\item{tbl}{Data frame with long format of Head-to-Head values.}
+\item{tbl}{Data frame in \link[=h2h_long]{long format} of Head-to-Head values.}
 
 \item{value}{String name for column with Head-to-Head value.}
 }
@@ -31,13 +31,13 @@ Functions to compute Head-to-Head values in matrix pair-value format.
 }
 \details{
 \code{h2h_mat()} computes Head-to-Head values in
-\link[=convert-pair-value]{matrix} format. It allows multiple
-Head-to-Head functions in \code{...} but only first (if present) will be used.
-Basically, it uses supplied function to compute \link[=h2h-long]{long format} of
-Head-to-Head values and then transforms it naturally to matrix, filling
-missing values with \code{fill}.
+\link[=convert-pair-value]{matrix} format. It allows multiple Head-to-Head
+functions in \code{...} but only first (if present) will be used. Basically, it
+uses supplied function to compute long format of Head-to-Head values and then
+\link[=long_to_mat]{transforms} it naturally to matrix, filling missing values
+with \code{fill}.
 
-\code{to_h2h_mat()} takes \strong{object of \code{h2h_long} structure} and converts it into
+\code{to_h2h_mat()} takes \strong{object of \link{h2h_long} structure} and converts it into
 \code{h2h_mat} using column with name \code{value} for values and filling data for
 implicitly missing (not explicitly provided in \code{tbl}) player pairs with
 \code{fill}. If \code{value} is \code{NULL} it takes first non-player column. If there is no
@@ -48,10 +48,10 @@ such column, it will use vector of dummy values (\code{NA}s or \code{fill}s).
 Head-to-Head value is a summary statistic of direct confrontation between two
 players. It is assumed that this value can be computed based only on the
 players' \link[=get_matchups]{matchups}. In other words, every game is converted
-in series of "subgames" between ordered pairs of players (including selfplay)
-which is stored as \link[=results-widecr]{widecr} object. After that, summary of
-item, defined by columns \code{player1} and \code{player2}, is computed using
-\code{\link[=summarise_item]{summarise_item()}}.
+into series of "subgames" between ordered pairs of players (including
+selfplay) which is stored as \link[=results-widecr]{widecr} object. After that,
+summary of item, defined by columns \code{player1} and \code{player2}, is computed
+using \code{\link[=summarise_item]{summarise_item()}}.
 
 That said, name-value pairs of Head-to-Head functions should be defined as
 for \code{summarise_item()} applied to data with columns \code{game}, \code{player1},
@@ -71,7 +71,7 @@ ncaa2005[-(1:2), ] \%>\%
 
 }
 \seealso{
-\link[=h2h-long]{Long format} of Head-to-Head values.
+\link[=h2h_long]{Long format} of Head-to-Head values.
 
 \link[=h2h_funs]{Common Head-to-Head functions}.
 }

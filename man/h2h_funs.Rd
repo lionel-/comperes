@@ -35,7 +35,7 @@ returns 0 if result is negative.
 than \code{player2}. Draws (determined by \code{\link[dplyr:near]{dplyr::near()}}) are omitted.
 \item \code{num_wins2} - computes number of matchups \code{player1} scored \strong{more} than
 \code{player2} \strong{plus} half the number of matchups where they had draw. \strong{Note}
-that will equal \code{player1} and \code{player2} there will be non-zero output.
+that for equal \code{player1} and \code{player2} there might be non-zero output.
 \item \code{num} - computes number of matchups.
 }
 
@@ -50,7 +50,7 @@ ncaa2005 \%>\% h2h_mat(!!! h2h_funs["num_wins2"])
 
 }
 \seealso{
-\link[=h2h-long]{Long format} of Head-to-Head values.
+\link[=h2h_long]{Long format} of Head-to-Head values.
 
 \link[=h2h-mat]{Matrix format} of Head-to-Head values.
 }

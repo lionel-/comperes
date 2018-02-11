@@ -11,7 +11,7 @@ num_wins(score_1, score_2, half_for_draw = FALSE, na.rm = TRUE)
 
 \item{score_2}{Vector of scores for second player.}
 
-\item{half_for_draw}{Use \code{TRUE} to add half the mathups with draws.}
+\item{half_for_draw}{Use \code{TRUE} to add half the matchups with draws.}
 
 \item{na.rm}{Use \code{TRUE} to not count pair of scores with at least one \code{NA}.}
 }

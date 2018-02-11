@@ -9,8 +9,11 @@ get_matchups(cr_data)
 \arguments{
 \item{cr_data}{Competition results ready for \code{\link[=as_longcr]{as_longcr()}}.}
 }
+\value{
+A \link[=results-widecr]{widecr} for games with two players.
+}
 \description{
-This function powers computing Head-to-Head values (both \link[=h2h-long]{long} and
+This function powers computing Head-to-Head values (both \link[=h2h_long]{long} and
 \link[=h2h-mat]{matrix}).
 }
 \details{
@@ -42,7 +45,7 @@ get_matchups(ncaa2005)
 
 }
 \seealso{
-\link[=h2h-long]{Long format} of Head-to-Head values.
+\link[=h2h_long]{Long format} of Head-to-Head values.
 
 \link[=h2h-mat]{Matrix format} of Head-to-Head values.
 }

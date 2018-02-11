@@ -13,10 +13,24 @@
 #' @param drop Use `TRUE` to drop rows with missing Head-to-Head values (see
 #'   Details).
 #'
+#' @section Head-to-Head value:
+#' Head-to-Head value is a summary statistic of direct confrontation between two
+#' players. It is assumed that this value can be computed based only on the
+#' players' [matchups][get_matchups()]. In other words, every game is converted
+#' into series of "subgames" between ordered pairs of players (including
+#' selfplay) which is stored as [widecr][results-widecr] object. After that,
+#' summary of item, defined by columns `player1` and `player2`, is computed
+#' using [summarise_item()].
+#'
+#' That said, name-value pairs of Head-to-Head functions should be defined as
+#' for `summarise_item()` applied to data with columns `game`, `player1`,
+#' `score1`, `player2`, `score2`.
+#'
 #' @details `h2h_long()` computes Head-to-Head values in
-#'   [long][convert-pair-value] format. It allows computation of multiple
-#'   Head-to-Head values at the same time by supplying multiple summary
-#'   functions in `...`. If no function is supplied in `...`
+#' [long][convert-pair-value] format. It allows computation of multiple
+#' Head-to-Head values at the same time by supplying multiple summary functions
+#' in `...`. If no function is supplied in `...`, it returns all appropriate
+#' combinations of [matchups][get_matchups()] (see next paragraph).
 #'
 #' After computing Head-to-Head values of actually present matchups, they are
 #' aligned with "levels" (see [levels2()]) of `player` vector (after applying
@@ -34,19 +48,6 @@
 #' it into `h2h_long` object with value column named as stored in `value`. Use
 #' `drop = TRUE` to remove rows with missing values in value column (but not in
 #' players').
-#'
-#' @section Head-to-Head value:
-#' Head-to-Head value is a summary statistic of direct confrontation between two
-#' players. It is assumed that this value can be computed based only on the
-#' players' [matchups][get_matchups()]. In other words, every game is converted
-#' in series of "subgames" between ordered pairs of players (including selfplay)
-#' which is stored as [widecr][results-widecr] object. After that, summary of
-#' item, defined by columns `player1` and `player2`, is computed using
-#' [summarise_item()].
-#'
-#' That said, name-value pairs of Head-to-Head functions should be defined as
-#' for `summarise_item()` applied to data with columns `game`, `player1`,
-#' `score1`, `player2`, `score2`.
 #'
 #' @return An object of class `h2h_long` which is a
 #'   [tibble][tibble::tibble] with columns `player1`, `player2` and those,
@@ -69,10 +70,10 @@
 #'
 #' [Common Head-to-Head functions][h2h_funs].
 #'
-#' @name h2h-long
+#' @name h2h_long
 NULL
 
-#' @rdname h2h-long
+#' @rdname h2h_long
 #' @export
 h2h_long <- function(cr_data, ..., fill = list()) {
   cr <- cr_data %>%
@@ -94,7 +95,7 @@ h2h_long <- function(cr_data, ..., fill = list()) {
     add_class("h2h_long")
 }
 
-#' @rdname h2h-long
+#' @rdname h2h_long
 #' @export
 to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
   mat %>%
@@ -111,23 +112,23 @@ to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
 #' @param cr_data Competition results ready for [as_longcr()].
 #' @param ... Name-value pairs of Head-to-Head functions (see Details).
 #' @param fill A single value to use instead of `NA` for missing pairs.
-#' @param tbl Data frame with long format of Head-to-Head values.
+#' @param tbl Data frame in [long format][h2h_long] of Head-to-Head values.
 #' @param value String name for column with Head-to-Head value.
 #'
-#' @details `h2h_mat()` computes Head-to-Head values in
-#'   [matrix][convert-pair-value] format. It allows multiple
-#'   Head-to-Head functions in `...` but only first (if present) will be used.
-#'   Basically, it uses supplied function to compute [long format][h2h-long] of
-#'   Head-to-Head values and then transforms it naturally to matrix, filling
-#'   missing values with `fill`.
+#' @inheritSection h2h_long Head-to-Head value
 #'
-#' `to_h2h_mat()` takes __object of `h2h_long` structure__ and converts it into
+#' @details `h2h_mat()` computes Head-to-Head values in
+#' [matrix][convert-pair-value] format. It allows multiple Head-to-Head
+#' functions in `...` but only first (if present) will be used. Basically, it
+#' uses supplied function to compute long format of Head-to-Head values and then
+#' [transforms][long_to_mat()] it naturally to matrix, filling missing values
+#' with `fill`.
+#'
+#' `to_h2h_mat()` takes __object of [h2h_long] structure__ and converts it into
 #' `h2h_mat` using column with name `value` for values and filling data for
 #' implicitly missing (not explicitly provided in `tbl`) player pairs with
 #' `fill`. If `value` is `NULL` it takes first non-player column. If there is no
 #' such column, it will use vector of dummy values (`NA`s or `fill`s).
-#'
-#' @inheritSection h2h-long Head-to-Head value
 #'
 #' @return An object of class `h2h_mat` which is a [matrix] with row names
 #'   indicating first player in matchup, col names - second and values -
@@ -144,7 +145,7 @@ to_h2h_long <- function(mat, value = "h2h_value", drop = FALSE) {
 #' ncaa2005[-(1:2), ] %>%
 #'   h2h_mat(mean_score = mean(score1), fill = 0)
 #'
-#' @seealso [Long format][h2h-long] of Head-to-Head values.
+#' @seealso [Long format][h2h_long] of Head-to-Head values.
 #'
 #' [Common Head-to-Head functions][h2h_funs].
 #'
@@ -221,7 +222,7 @@ to_h2h_mat <- function(tbl, value = NULL, fill = NULL) {
 #' than `player2`. Draws (determined by [dplyr::near()]) are omitted.
 #' - `num_wins2` - computes number of matchups `player1` scored __more__ than
 #' `player2` __plus__ half the number of matchups where they had draw. __Note__
-#' that will equal `player1` and `player2` there will be non-zero output.
+#' that for equal `player1` and `player2` there might be non-zero output.
 #' - `num` - computes number of matchups.
 #'
 #' __Note__ that it is generally better to subset `h2h_funs` using names
@@ -233,7 +234,7 @@ to_h2h_mat <- function(tbl, value = NULL, fill = NULL) {
 #'
 #' ncaa2005 %>% h2h_mat(!!! h2h_funs["num_wins2"])
 #'
-#' @seealso [Long format][h2h-long] of Head-to-Head values.
+#' @seealso [Long format][h2h_long] of Head-to-Head values.
 #'
 #' [Matrix format][h2h-mat] of Head-to-Head values.
 #'
@@ -257,7 +258,7 @@ h2h_funs <- list(
 #'
 #' @param score_1 Vector of scores for first player.
 #' @param score_2 Vector of scores for second player.
-#' @param half_for_draw Use `TRUE` to add half the mathups with draws.
+#' @param half_for_draw Use `TRUE` to add half the matchups with draws.
 #' @param na.rm Use `TRUE` to not count pair of scores with at least one `NA`.
 #'
 #' @keywords internal

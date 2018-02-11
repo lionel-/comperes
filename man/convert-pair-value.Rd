@@ -27,7 +27,7 @@ Details).}
 
 \item{mat}{Matrix with pair-value data.}
 
-\item{drop}{Use \code{TRUE} to drop rows with "missing" values (see Details).}
+\item{drop}{Use \code{TRUE} to drop rows with missing value (see Details).}
 }
 \value{
 \code{long_to_mat()} returns a matrix with selected values where row names
@@ -37,8 +37,8 @@ indicate first key in pair, col names - second.
 one for first key in pair, the one for second, and the one for value.
 }
 \description{
-Functions for conversion between long data (data frame with columns for pair
-identifiers and value column) and matrix.
+Functions for conversion between long pair-value data (data frame with
+columns for pair identifiers and value column) and matrix.
 }
 \details{
 Pair-value data is commonly used in description of pairs of objects.
@@ -46,7 +46,7 @@ Pair is described by two keys (usually integer or character) and value is an
 object of arbitrary nature.
 
 In \strong{long format} there are at least three columns: for first key in pair,
-for second and for value (might be more). In \strong{matrix format} pair-value
+for second key and for value (might be more). In \strong{matrix format} pair-value
 data is represented as matrix of values with row names as character
 representation of first key, column names - second key.
 
@@ -54,10 +54,12 @@ representation of first key, column names - second key.
 \itemize{
 \item Pair identifiers are taken from columns with names \code{row_key} (to be used as
 row names) and \code{col_key} (to be used as column names). Unique identifiers
-(and future dimension names) are determined with \code{\link[=levels2]{levels2()}}. \strong{Note} that
-\code{NA}s are treated as single unknown key and put on last place.
+(and future dimension names) are determined with \code{\link[=levels2]{levels2()}}. This is a way
+to target function on specific set of pairs by using factor columns. \strong{Note}
+that \code{NA}s are treated as single unknown key and put on last place (in case
+of non-factor).
 \item Values are taken from column with name \code{value}. \strong{Note} that if \code{value}
-has length 0 (typically is \code{NULL}) then \code{long_to_mat()} will take first
+has length 0 (typically \code{NULL}) then \code{long_to_mat()} will take first
 non-key column. If there is no such column, it will use vector of dummy
 values (\code{NA}s or \code{fill}s). In both cases a message is given if \code{silent = FALSE}.
 \item Output is a matrix with described row and column names. Value of pair
@@ -66,8 +68,9 @@ values (\code{NA}s or \code{fill}s). In both cases a message is given if \code{s
 taken.
 }
 
-\code{mat_to_long()} basically performs inverse operation to \code{long_to_mat()}. If
-\code{drop = TRUE} it drops rows with values (but not keys) being missing.
+\code{mat_to_long()} basically performs inverse operation to \code{long_to_mat()} but
+pair identifiers are always character. If \code{drop = TRUE} it drops rows with
+values (but not keys) being missing.
 }
 \examples{
 long_data <- data.frame(
