@@ -88,8 +88,8 @@ h2h_long <- function(cr_data, ..., fill = list()) {
       fill = fill
     ) %>%
     filter(
-      .data$player1 %in% player_levs,
-      .data$player2 %in% player_levs
+      as.character(.data$player1) %in% player_levs,
+      as.character(.data$player2) %in% player_levs
     ) %>%
     add_class("h2h_long")
 }
