@@ -83,15 +83,23 @@ levels2 <- function(x, na.last = TRUE) {
 }
 
 # Operations with class ---------------------------------------------------
-add_class <- function(obj, class_char) {
-  class(obj) <- c(class_char, class(obj))
+add_class <- function(x, class_chr) {
+  class(x) <- c(class_chr, class(x))
 
-  obj
+  x
 }
 
-add_class_cond <- function(x, class) {
-  if (class(x)[1] != class) {
-    class(x) <- c(class, class(x))
+add_class_cond <- function(x, class_chr) {
+  if (class(x)[1] != class_chr) {
+    class(x) <- c(class_chr, class(x))
+  }
+
+  x
+}
+
+remove_class_cond <- function(x, class_chr) {
+  if (class(x)[1] == class_chr) {
+    class(x) <- class(x)[-1]
   }
 
   x

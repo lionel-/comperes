@@ -82,15 +82,29 @@ test_that("add_class works", {
   output <- input
   class(output) <- c("class2", "class1")
 
-  expect_identical(add_class(input, class_char = "class2"),
-                   output)
+  expect_identical(add_class(input, "class2"), output)
 })
 
 
 # add_class_cond ----------------------------------------------------------
 test_that("add_class_cond works", {
-  expect_equal(class(add_class_cond(mtcars, "data.frame")), "data.frame")
-  expect_equal(class(add_class_cond(mtcars, "some")), c("some", "data.frame"))
+  input <- 1:10
+  class(input) <- "class1"
+  output <- input
+  class(output) <- c("class2", "class1")
+
+  expect_identical(add_class_cond(input, "class2"), output)
+  expect_identical(add_class_cond(input, "class1"), input)
+})
+
+test_that("add_class works", {
+  input <- 1:10
+  class(input) <- c("class2", "class1")
+  output <- input
+  class(output) <- c("class1")
+
+  expect_identical(remove_class_cond(input, "class2"), output)
+  expect_identical(remove_class_cond(input, "class1"), input)
 })
 
 
